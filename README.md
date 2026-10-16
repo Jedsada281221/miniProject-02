@@ -15,9 +15,9 @@
 
 ## 🔗 ลิงก์ที่เกี่ยวข้อง (Quick Links)
 
-- 🌐 **หน้าเว็บไคลเอนต์ (Client Application):** [เปิดใช้งาน index.html](./index.html)
-- 📸 **ภาพ Debug ฝั่ง Server:** [ดูภาพ debug-server.png](./debug-server.png)
-- 📸 **ภาพ Debug ฝั่ง Client:** [ดูภาพ debug-client.png](./debug-client.png)
+- 🌐 **หน้าเว็บไคลเอนต์ (Client Application):** [เปิดใช้งาน index.html](./public/index.html)
+- 📸 **ภาพ Debug ฝั่ง Server:** [ดูภาพ debug-server.png](./public/debug-server.png)
+- 📸 **ภาพ Debug ฝั่ง Client:** [ดูภาพ debug-client.png](./public/debug-client.png)
 
 ---
 
@@ -37,15 +37,16 @@
 ## 📁 โครงสร้างโปรเจกต์ (Project Structure)
 
 ```text
-miniProject-02/
-├── index.html          # หน้าเว็บหลัก (Client)
-├── index.js            # Express Web Server
-├── database.sqlite     # ไฟล์ฐานข้อมูล
-├── package.json        # Dependencies
-├── package-lock.json
-├── debug-client.png    # ภาพหลักฐานการ Debug ฝั่ง Client
-├── debug-server.png    # ภาพหลักฐานการ Debug ฝั่ง Server
-└── README.md           # เอกสารอธิบายโปรเจกต์
+mini-project-2/
+├── 📂 public/              # HTML, CSS และ JavaScript สำหรับหน้าเว็บไคลเอนต์
+│   ├── index.html          # หน้าเว็บหลัก
+│   ├── debug-client.png    # ภาพหลักฐานการ Debug ฝั่ง Client
+│   └── debug-server.png    # ภาพหลักฐานการ Debug ฝั่ง Server
+├── 📂 server/              # Node.js + Express API และฐานข้อมูล SQLite
+│   ├── index.js            # Express Web Server
+│   ├── database.sqlite     # ไฟล์ฐานข้อมูล
+│   └── package.json        # Dependencies
+└── README.md               # เอกสารอธิบายโปรเจกต์
 ```
 
 ---
@@ -57,13 +58,14 @@ miniProject-02/
 เปิด Terminal แล้วรันคำสั่ง
 
 ```bash
+cd server
 npm install
 npm run dev
 ```
 
 ### 2. ฝั่ง Client (Frontend)
 
-เปิดไฟล์ `index.html` ด้วยเบราว์เซอร์ (ดับเบิลคลิก หรือคลิกขวา → Open with Browser)
+เปิดไฟล์ `public/index.html` ด้วยเบราว์เซอร์ (ดับเบิลคลิก หรือคลิกขวา → Open with Browser)
 
 > ⚠️ ต้องเปิด Server ค้างไว้ก่อน หน้าเว็บจึงจะดึงและบันทึกข้อมูลได้
 
@@ -71,10 +73,10 @@ npm run dev
 
 ## 📸 ภาพประกอบการทำงาน (Screenshots)
 
-### Debug ฝั่ง Server
+- 📸 **ภาพ Debug ฝั่ง Server:**
 
-![Debug Server](./debug-server.png)
+  ![Debug Server](./public/debug-server.png)
 
-### Debug ฝั่ง Client
+- 📸 **ภาพ Debug ฝั่ง Client:**
 
-![Debug Client](./debug-client.png)
+  ![Debug Client](./public/debug-client.png)

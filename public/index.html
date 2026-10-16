@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Project #2 - Professional Item Manager</title>
+  <style>
+    :root {
+      --primary-color: #4f46e5;
+      --primary-hover: #4338ca;
+      --danger-color: #ef4444;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .container {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    input {
+      padding: 12px 16px;
+      font-size: 15px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+    button[type="submit"] {
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: var(--primary-hover);
+    }
+
+    h3 {
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      background: #f1f5f9;
+      margin-bottom: 10px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.1s;
+    }
+
+    li:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    button.delete-btn {
+      background-color: var(--danger-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    button.delete-btn:hover {
+      opacity: 0.9;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: #94a3b8;
+      font-style: italic;
+      padding: 20px 0;
+    }
+  </style>หน้าเว็บ
+</head>
+<body>
+  <div class="container">
+    <h2>✨ ระบบจัดการรายการ (Item Manager)</h2>
+    
+    <form id="itemForm">
+      <input type="text" id="name" placeholder="ชื่อรายการโปรเจกต์ / สินค้า" required autocomplete="off">
+      <input type="text" id="description" placeholder="รายละเอียดเพิ่มเติม" autocomplete="off">
+      <button type="submit">➕ เพิ่มข้อมูลใหม่</button>
+    </form>
+
+    <h3>📋 รายการทั้งหมดในฐานข้อมูล</h3>
+    <ul id="itemList"></ul>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:5000/api/items';
+
+    async function fetchItems() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        const list = document.getElementById('itemList');
+        list.innerHTML = '';
+
+        if (data.length === 0) {
+          list.innerHTML = `<li class="empty-msg">ยังไม่มีข้อมูลในระบบ ลองเพิ่มรายการด้านบนดูเลย!</li>`;
+          return;
+        }
+
+        data.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <div>
+              <strong style="font-size: 16px; color: #0f172a;">${item.name}</strong><br>
+              <span style="color: #64748b; font-size: 14px;">${item.description || 'ไม่มีรายละเอียด'}</span>
+            </div>
+            <button class="delete-btn" onclick="deleteItem(${item.id})">ลบ</button>
+          `;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Error fetching items:', err);
+      }
+    }
+
+    document.getElementById('itemForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const description = document.getElementById('description').value;
+
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, description })
+      });
+
+      document.getElementById('name').value = '';
+      document.getElementById('description').value = '';
+      fetchItems();
+    });
+
+    async function deleteItem(id) {
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      fetchItems();
+    }
+
+    fetchItems();
+  </script>
+</body>
+</html>
